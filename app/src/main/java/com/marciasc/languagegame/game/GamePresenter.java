@@ -1,7 +1,6 @@
 package com.marciasc.languagegame.game;
 
 import android.content.Context;
-import android.os.AsyncTask;
 
 import com.marciasc.languagegame.WordTranslation;
 import com.marciasc.languagegame.WordsRepository;
@@ -9,12 +8,13 @@ import com.marciasc.languagegame.WordsRepository;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GamePresenter implements GameContract.Presenter {
+public class GamePresenter implements GameContract.Presenter, WordsRepository.OnLoadingWordsFinished {
     private GameContract.View mView;
-    private int mErrosCount = 0;
+    private int mErrorsCount = 0;
     private int mRightsCount = 0;
     private int mMatchCounter = 0;
     private GameStrategy mGameStrategy;
+    private WordsRepository.LoadingWordsAsyncTask mLoadingWordsAsyncTask;
 
     private List<WordTranslation> mWordTranslations = new ArrayList<>();
 
@@ -26,15 +26,17 @@ public class GamePresenter implements GameContract.Presenter {
     @Override
     public void loadGame() {
         mMatchCounter = 0;
-        mErrosCount = 0;
+        mErrorsCount = 0;
         mRightsCount = 0;
         mView.showLoadingState();
         mGameStrategy = new GameStrategy();
-        new LoadWordsAsyncTask().execute();
+        mLoadingWordsAsyncTask = new WordsRepository.LoadingWordsAsyncTask((Context) mView, mGameStrategy);
+        mLoadingWordsAsyncTask.setListener(this);
+        mLoadingWordsAsyncTask.execute();
     }
 
     private void finishLoadingGame() {
-        mView.updateCounter(mErrosCount,mRightsCount);
+        mView.updateCounter(mErrorsCount, mRightsCount);
         mView.updateWords(mWordTranslations.get(mMatchCounter));
         mView.showReadyState();
     }
@@ -46,22 +48,37 @@ public class GamePresenter implements GameContract.Presenter {
 
     @Override
     public void markPoint(WordTranslation wordTranslation, boolean rightTranslation) {
-        if(rightTranslation == wordTranslation.getmRealPair()) {
+        if (rightTranslation == wordTranslation.getmRealPair()) {
             mRightsCount++;
+            mView.showPositiveFeedback();
         } else {
-            mErrosCount++;
+            mErrorsCount++;
+            mView.showNegativeFeedback();
         }
         continueGame();
     }
 
     @Override
     public void lostPoint() {
-        mErrosCount++;
+        mErrorsCount++;
         continueGame();
     }
 
+    @Override
+    public void onDestroy() {
+        if (mLoadingWordsAsyncTask != null) {
+            mLoadingWordsAsyncTask.setListener(null);
+        }
+    }
+
+    @Override
+    public void onLoadingWordsFinished(List<WordTranslation> wordTranslationList) {
+        mWordTranslations = wordTranslationList;
+        finishLoadingGame();
+    }
+
     private void verifyResult() {
-        if(mGameStrategy.getRoundResult(mErrosCount,mRightsCount) == GameStrategy.RoundResult.WON) {
+        if (mGameStrategy.hasUserWon(mErrorsCount, mRightsCount)) {
             mView.showPositiveResult();
         } else {
             mView.showNegativeResult();
@@ -69,9 +86,9 @@ public class GamePresenter implements GameContract.Presenter {
     }
 
     private void continueGame() {
-        mView.updateCounter(mErrosCount,mRightsCount);
+        mView.updateCounter(mErrorsCount, mRightsCount);
         mMatchCounter++;
-        if(mMatchCounter >= GameStrategy.MAXIMUM_MATCHES){
+        if (mMatchCounter >= GameStrategy.MAXIMUM_MATCHES) {
             verifyResult();
         } else {
             mView.updateWords(mWordTranslations.get(mMatchCounter));
@@ -79,18 +96,4 @@ public class GamePresenter implements GameContract.Presenter {
         }
     }
 
-    class LoadWordsAsyncTask extends AsyncTask<Void, Void, Void> {
-
-        @Override
-        protected Void doInBackground(Void... voids) {
-            List<WordTranslation> wordsList = WordsRepository.getInstance().loadWords((Context) mView);
-            mWordTranslations = mGameStrategy.generateListOfWords(wordsList);
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void result) {
-            finishLoadingGame();
-        }
-    }
 }

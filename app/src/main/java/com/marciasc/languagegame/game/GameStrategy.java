@@ -7,13 +7,9 @@ import java.util.List;
 import java.util.Random;
 
 public class GameStrategy {
-    public static final int MAXIMUM_MATCHES = 4;
+    public static final int MAXIMUM_MATCHES = 10;
 
     private Random mRandom = new Random();
-
-    public enum RoundResult {
-        WON, LOST
-    }
 
     public List<WordTranslation> generateListOfWords(List<WordTranslation> list) {
         List<WordTranslation> wordList = new ArrayList<>();
@@ -37,11 +33,8 @@ public class GameStrategy {
         return wordList;
     }
 
-    public RoundResult getRoundResult(int errors, int rights) {
-        if (errors >= rights) {
-            return RoundResult.LOST;
-        }
-        return RoundResult.WON;
+    public boolean hasUserWon(int errors, int rights) {
+        return rights > errors;
     }
 
     private boolean getTruePairs() {
@@ -49,6 +42,6 @@ public class GameStrategy {
     }
 
     private int getRandomIndex(int bound) {
-       return mRandom.nextInt(bound);
+        return mRandom.nextInt(bound);
     }
 }

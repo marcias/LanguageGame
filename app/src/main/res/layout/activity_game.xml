@@ -3,20 +3,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#96E5F1F7"
     tools:context=".game.GameActivity">
-
-    <include
-        android:id="@+id/view_ready_state"
-        android:layout_height="match_parent"
-        android:layout_width="match_parent"
-        layout="@layout/view_ready_state" />
 
     <LinearLayout
         android:id="@+id/ll_counter"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:background="@android:color/darker_gray"
+        android:background="#E5F1F7"
+        android:gravity="center_horizontal"
         android:orientation="horizontal"
         android:padding="5dp">
 
@@ -26,7 +21,7 @@
             android:layout_height="match_parent"
             android:layout_marginRight="10dp"
             android:textColor="@android:color/holo_red_dark"
-            android:textSize="20sp"
+            android:textSize="22sp"
             tools:text="0" />
 
         <TextView
@@ -34,18 +29,18 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:textColor="@android:color/holo_green_dark"
-            android:textSize="20sp"
+            android:textSize="22sp"
             tools:text="0" />
 
     </LinearLayout>
 
     <TextView
         android:id="@+id/tv_word"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/ll_counter"
         android:layout_centerHorizontal="true"
-        android:background="@android:color/holo_blue_dark"
+        android:gravity="center_horizontal"
         android:textSize="26sp"
         android:textStyle="bold"
         tools:text="Chair" />
@@ -58,6 +53,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="5dp"
         android:textSize="26sp"
+        android:visibility="gone"
         tools:text="Cadeira" />
 
     <ProgressBar
@@ -70,19 +66,28 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true">
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="10dp">
 
-        <Button
+        <ImageButton
             android:id="@+id/btn_wrong_translation"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:onClick="onWrongTranslationPressed" />
+            android:onClick="onWrongTranslationPressed"
+            android:src="@drawable/ic_wrong" />
 
-        <Button
+        <ImageButton
             android:id="@+id/btn_right_translation"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:onClick="onRightTranslationPressed" />
+            android:onClick="onRightTranslationPressed"
+            android:src="@drawable/ic_right" />
     </LinearLayout>
+
+    <include
+        android:id="@+id/view_ready_state"
+        layout="@layout/view_ready_state"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 
 </RelativeLayout>

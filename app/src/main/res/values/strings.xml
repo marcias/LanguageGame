@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">LanguageGame</string>
+
+    <string name="study_more">You need to study more</string>
+    <string name="you_won">Congratulations! You won this round!</string>
+    <string name="play_again">Play again</string>
 </resources>
