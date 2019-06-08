@@ -1,7 +1,11 @@
 package com.marciasc.languagegame;
 
+import com.google.gson.annotations.SerializedName;
+
 public class WordTranslation {
+    @SerializedName("text_eng")
     private String mWord;
+    @SerializedName("text_spa")
     private String mTranslation;
     private Boolean mRealPair;
 
