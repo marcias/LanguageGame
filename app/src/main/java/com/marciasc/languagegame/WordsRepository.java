@@ -1,13 +1,16 @@
 package com.marciasc.languagegame;
 
 import android.content.Context;
+import android.os.AsyncTask;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.marciasc.languagegame.game.GameStrategy;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,7 +33,8 @@ public class WordsRepository {
     public List<WordTranslation> loadWords(Context context) {
         if (mWordsRepository.isEmpty()) {
             String json = loadWordsFromFile(context);
-            mWordsRepository = new Gson().fromJson(json, new TypeToken<List<WordTranslation>>(){}.getType());
+            mWordsRepository = new Gson().fromJson(json, new TypeToken<List<WordTranslation>>() {
+            }.getType());
         }
         return mWordsRepository;
     }
@@ -50,5 +54,39 @@ public class WordsRepository {
             e.printStackTrace();
         }
         return json;
+    }
+
+    public static class LoadingWordsAsyncTask extends AsyncTask<Void, Void, Void> {
+        WeakReference<Context> contextWeakReference;
+        GameStrategy gameStrategy;
+        OnLoadingWordsFinished listener;
+        List<WordTranslation> wordTranslationList;
+
+        public LoadingWordsAsyncTask(Context context, GameStrategy strategy) {
+            contextWeakReference = new WeakReference<>(context);
+            gameStrategy = strategy;
+        }
+
+        public void setListener(OnLoadingWordsFinished onLoading) {
+            listener = onLoading;
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            List<WordTranslation> wordsList = WordsRepository.getInstance().loadWords(contextWeakReference.get());
+            wordTranslationList = gameStrategy.generateListOfWords(wordsList);
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+            if (listener != null) {
+                listener.onLoadingWordsFinished(wordTranslationList);
+            }
+        }
+    }
+
+    public interface OnLoadingWordsFinished {
+        void onLoadingWordsFinished(List<WordTranslation> wordTranslationList);
     }
 }

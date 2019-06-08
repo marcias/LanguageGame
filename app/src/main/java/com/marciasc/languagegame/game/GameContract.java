@@ -20,5 +20,6 @@ public class GameContract {
         void initGame();
         void markPoint(WordTranslation wordTranslation, boolean rightTranslation);
         void lostPoint();
+        void onDestroy();
     }
 }
