@@ -5,44 +5,84 @@
     android:layout_height="match_parent"
     tools:context=".game.GameActivity">
 
-    <LinearLayout
+    <include
+        android:id="@+id/view_ready_state"
+        android:layout_height="match_parent"
         android:layout_width="match_parent"
+        layout="@layout/view_ready_state" />
+
+    <LinearLayout
+        android:id="@+id/ll_counter"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:layout_centerHorizontal="true"
+        android:background="@android:color/darker_gray"
+        android:orientation="horizontal"
+        android:padding="5dp">
 
         <TextView
             android:id="@+id/tv_errors"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:textSize="15sp"/>
+            android:layout_marginRight="10dp"
+            android:textColor="@android:color/holo_red_dark"
+            android:textSize="20sp"
+            tools:text="0" />
 
         <TextView
             android:id="@+id/tv_rights"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:textSize="15sp"/>
+            android:textColor="@android:color/holo_green_dark"
+            android:textSize="20sp"
+            tools:text="0" />
 
     </LinearLayout>
 
     <TextView
         android:id="@+id/tv_word"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="20sp"/>
+        android:layout_below="@id/ll_counter"
+        android:layout_centerHorizontal="true"
+        android:background="@android:color/holo_blue_dark"
+        android:textSize="26sp"
+        android:textStyle="bold"
+        tools:text="Chair" />
 
     <TextView
         android:id="@+id/tv_translation"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:layout_marginBottom="5dp"
+        android:layout_below="@id/tv_word"
         android:layout_centerHorizontal="true"
-        android:visibility="gone"/>
+        android:layout_marginBottom="5dp"
+        android:textSize="26sp"
+        tools:text="Cadeira" />
 
     <ProgressBar
         android:id="@+id/progress"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"/>
+        android:layout_centerInParent="true" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true">
+
+        <Button
+            android:id="@+id/btn_wrong_translation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="onWrongTranslationPressed" />
+
+        <Button
+            android:id="@+id/btn_right_translation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="onRightTranslationPressed" />
+    </LinearLayout>
 
 </RelativeLayout>

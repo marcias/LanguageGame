@@ -11,6 +11,7 @@ public class GameContract {
         void showNegativeResult();
         void initGameAnimation();
         void showReadyState();
+        void showLoadingState();
     }
 
     interface Presenter {
