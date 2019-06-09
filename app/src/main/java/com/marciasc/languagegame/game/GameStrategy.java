@@ -13,7 +13,7 @@ public class GameStrategy {
 
     public List<WordTranslation> generateListOfWords(List<WordTranslation> list) {
         List<WordTranslation> wordList = new ArrayList<>();
-        WordTranslation wordTranslation = new WordTranslation();
+        WordTranslation wordTranslation;
         int counter = 0;
         while (counter < MAXIMUM_MATCHES) {
             if (getTruePairs()) {
@@ -23,6 +23,7 @@ public class GameStrategy {
             } else {
                 int indexWord = getRandomIndex(list.size());
                 int indexFalseTranslation = getRandomIndex(list.size());
+                wordTranslation = new WordTranslation();
                 wordTranslation.setmWord(list.get(indexWord).getmWord());
                 wordTranslation.setmTranslation(list.get(indexFalseTranslation).getmTranslation());
                 wordTranslation.setmRealPair(false);
