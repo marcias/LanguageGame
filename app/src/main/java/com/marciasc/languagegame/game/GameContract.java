@@ -9,8 +9,11 @@ public class GameContract {
         void updateCounter(int errorsCount, int rightCount);
         void showPositiveResult();
         void showNegativeResult();
-        void initGameAnimation();
+        void showGameAnimation();
         void showReadyState();
+        void showLoadingState();
+        void showPositiveFeedback();
+        void showNegativeFeedback();
     }
 
     interface Presenter {
@@ -18,5 +21,7 @@ public class GameContract {
         void loadGame();
         void initGame();
         void markPoint(WordTranslation wordTranslation, boolean rightTranslation);
+        void lostPoint();
+        void onDestroy();
     }
 }
