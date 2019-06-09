@@ -20,6 +20,7 @@ import com.marciasc.languagegame.WordTranslation;
 
 public class GameActivity extends AppCompatActivity implements GameContract.View {
     private final int mDuration = 4000;
+    private final int mDurationFeedback = 1000;
     private GamePresenter mGamePresenter;
     private TextView mTvErrorsCounter;
     private TextView mTvRightsCounter;
@@ -96,24 +97,24 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
 
     @Override
     public void showPositiveFeedback() {
-        mLayoutCounter.setBackgroundColor(getResources().getColor(R.color.green));
+        mLayoutCounter.setBackgroundColor(getResources().getColor(R.color.green_15));
         mHandler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                mLayoutCounter.setBackgroundColor(getResources().getColor(R.color.gray));
+                mLayoutCounter.setBackgroundColor(getResources().getColor(R.color.white));
             }
         }, 1000);
     }
 
     @Override
     public void showNegativeFeedback() {
-        mLayoutCounter.setBackgroundColor(getResources().getColor(R.color.red));
+        mLayoutCounter.setBackgroundColor(getResources().getColor(R.color.red_15));
         mHandler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                mLayoutCounter.setBackgroundColor(getResources().getColor(R.color.gray));
+                mLayoutCounter.setBackgroundColor(getResources().getColor(R.color.white));
             }
-        }, 1000);
+        }, mDurationFeedback);
     }
 
     public void onRightTranslationPressed(View view) {
@@ -133,7 +134,7 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
     }
 
     private void showDialogResult(String message) {
-        new AlertDialog.Builder(this).setCancelable(false).setMessage(message).setNeutralButton(getString(R.string.play_again), new DialogInterface.OnClickListener() {
+        new AlertDialog.Builder(this).setCancelable(false).setMessage(message).setNeutralButton(getString(android.R.string.ok), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 mGamePresenter.loadGame();

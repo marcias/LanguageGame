@@ -61,6 +61,7 @@ public class GamePresenter implements GameContract.Presenter, WordsRepository.On
     @Override
     public void lostPoint() {
         mErrorsCount++;
+        mView.showNegativeFeedback();
         continueGame();
     }
 
